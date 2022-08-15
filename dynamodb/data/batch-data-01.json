@@ -4,7 +4,10 @@
       "PutRequest": {
         "Item": {
           "Play": {
-            "S": "Test"
+            "S": "Play"
+          },
+          "Ground": {
+            "S": "Ground"
           }
         }
       }
