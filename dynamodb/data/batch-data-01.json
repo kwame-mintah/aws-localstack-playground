@@ -1,0 +1,13 @@
+{
+  "Playground": [
+    {
+      "PutRequest": {
+        "Item": {
+          "Play": {
+            "S": "Test"
+          }
+        }
+      }
+    }
+  ]
+}
