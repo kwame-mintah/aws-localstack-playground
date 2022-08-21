@@ -34,6 +34,7 @@ services:
         aws dynamodb --endpoint-url=http://localstack:4566 create-table --table-name Playground --attribute-definitions AttributeName=Play,AttributeType=S AttributeName=Ground,AttributeType=S --key-schema AttributeName=Play,KeyType=HASH AttributeName=Ground,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=5 --region eu-west-2
         sleep 10
         aws dynamodb --endpoint-url=http://localstack:4566 batch-write-item --request-items file://../dyanmodb/batch-data-01.json
+        aws dynamodb --endpoint-url=http://localstack:4566 describe-table --table-name Playground --output table
       "
     volumes:
       - ./dynamodb/data:/dyanmodb
