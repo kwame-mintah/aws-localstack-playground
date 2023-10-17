@@ -1,0 +1,7 @@
+version: '3.9'
+
+services:
+  localstack:
+    ports:
+      - "4566-4599:4566-4599"
+      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
