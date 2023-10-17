@@ -6,23 +6,18 @@ services:
     env_file:
       - .env
     environment:
-      - DEBUG=${DEBUG-:DEBUG}
-      - HOST_TMP_FOLDER=${TMPDIR:-/tmp/}localstack
-      - DOCKER_HOST=unix:///var/run/docker.sock
       - AWS_DEFAULT_REGION=${AWS_REGION:-eu-west-2}
-      - KINESIS_PROVIDER=kinesalite
+      - DEBUG=${DEBUG-:DEBUG}
+      - DOCKER_HOST=unix:///var/run/docker.sock
       - LOCALSTACK_SERVICES=dynamodb
     volumes:
       - "${TMPDIR:-/tmp}/localstack:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
       - localstack
-    ports:
-      - "4566-4599:4566-4599"
-      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
 
   localstack-resources-setup:
-    image: ${MESOSPHERE_AWS_IMAGE}:${MESOSPHERE_AWS_TAG:-latest}
+    image: ${AWS_CLI_IMAGE}:${AWS_CLI_TAG:-latest}
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-aws-access-key-id}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-aws-secret-access-key}
@@ -31,10 +26,16 @@ services:
     command: >
       "
         sleep 10
-        aws dynamodb --endpoint-url=http://localstack:4566 create-table --table-name Playground --attribute-definitions AttributeName=Play,AttributeType=S AttributeName=Ground,AttributeType=S --key-schema AttributeName=Play,KeyType=HASH AttributeName=Ground,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=5 --region eu-west-2
+        aws dynamodb --endpoint-url=${LOCALSTACK_URL} create-table --table-name Playground --attribute-definitions AttributeName=Play,AttributeType=S AttributeName=Ground,AttributeType=S --key-schema AttributeName=Play,KeyType=HASH AttributeName=Ground,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=5 --region ${AWS_REGION}
         sleep 10
-        aws dynamodb --endpoint-url=http://localstack:4566 batch-write-item --request-items file://../dyanmodb/batch-data-01.json
-        aws dynamodb --endpoint-url=http://localstack:4566 describe-table --table-name Playground --output table
+        aws dynamodb --endpoint-url=${LOCALSTACK_URL} batch-write-item --request-items file://../dyanmodb/batch-data-01.json
+        aws dynamodb --endpoint-url=${LOCALSTACK_URL} describe-table --table-name Playground --output table
+        sleep 10
+        aws sqs create-queue --endpoint-url=${LOCALSTACK_URL} --queue-name ${AWS_QUEUE_NAME_1} --region ${AWS_REGION}
+        sleep 10
+        aws --endpoint-url=${LOCALSTACK_URL} s3 mb s3://${AWS_S3_BUCKET_NAME_1} --region ${AWS_REGION}
+        sleep 10
+        aws --endpoint-url=${LOCALSTACK_URL} s3 ls
       "
     volumes:
       - ./dynamodb/data:/dyanmodb
