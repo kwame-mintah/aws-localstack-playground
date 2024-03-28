@@ -22,20 +22,22 @@ services:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-aws-access-key-id}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-aws-secret-access-key}
       - AWS_DEFAULT_REGION=${AWS_REGION:-eu-west-2}
+      - AWS_ENDPOINT_URL=${LOCALSTACK_URL}
     entrypoint: /bin/sh -c
     command: >
       "
-        sleep 10
-        aws dynamodb --endpoint-url=${LOCALSTACK_URL} create-table --table-name Playground --attribute-definitions AttributeName=Play,AttributeType=S AttributeName=Ground,AttributeType=S --key-schema AttributeName=Play,KeyType=HASH AttributeName=Ground,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=5 --region ${AWS_REGION}
-        sleep 10
-        aws dynamodb --endpoint-url=${LOCALSTACK_URL} batch-write-item --request-items file://../dyanmodb/batch-data-01.json
-        aws dynamodb --endpoint-url=${LOCALSTACK_URL} describe-table --table-name Playground --output table
-        sleep 10
-        aws sqs create-queue --endpoint-url=${LOCALSTACK_URL} --queue-name ${AWS_QUEUE_NAME_1} --region ${AWS_REGION}
-        sleep 10
-        aws --endpoint-url=${LOCALSTACK_URL} s3 mb s3://${AWS_S3_BUCKET_NAME_1} --region ${AWS_REGION}
-        sleep 10
-        aws --endpoint-url=${LOCALSTACK_URL} s3 ls
+        sleep 2
+        aws dynamodb create-table --table-name Playground --attribute-definitions AttributeName=Play,AttributeType=S AttributeName=Ground,AttributeType=S --key-schema AttributeName=Play,KeyType=HASH AttributeName=Ground,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=5 --region ${AWS_REGION}
+        sleep 2
+        aws dynamodb batch-write-item --request-items file://../dyanmodb/batch-data-01.json
+        aws dynamodb describe-table --table-name Playground --output table
+        sleep 2
+        aws sqs create-queue --queue-name ${AWS_QUEUE_NAME_1} --region ${AWS_REGION}
+        sleep 2
+        aws s3 mb s3://${AWS_S3_BUCKET_NAME_1} --region ${AWS_REGION}
+        sleep 2
+        aws s3 cp ../dyanmodb s3://${AWS_S3_BUCKET_NAME_1} --recursive
+        aws s3 ls s3://${AWS_S3_BUCKET_NAME_1}
       "
     volumes:
       - ./dynamodb/data:/dyanmodb
