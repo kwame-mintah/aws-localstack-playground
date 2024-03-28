@@ -27,4 +27,9 @@
    docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
    ```
 
+> [!NOTE]
+>
+> If running any of the example code found in `/examples/` the ports will need to be available, if the code is not
+> being executed within a docker container within the same network.
+
 There is nothing else to it, fairly straight forward.
