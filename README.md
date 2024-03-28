@@ -9,6 +9,9 @@
 
 ## Usage
 
+In order to create the LocalStack containers, please copy `.env.template` and / or amend environment variables into a
+new file `.env` to be used by Docker.
+
 ### Running the LocalStack
 
 1. Clone the repository locally
