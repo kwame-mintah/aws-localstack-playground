@@ -1,7 +1,7 @@
 # 🛝 AWS LocalStack Playground
 
- As the name of the repository suggests, it's just a [*playground*](https://dictionary.cambridge.org/dictionary/english/playground).
- Will be using it to play with different AWS services supported by the [LocalStack](https://docs.localstack.cloud/overview/), to gain a better understanding.
+As the name of the repository suggests, it's just a [_playground_](https://dictionary.cambridge.org/dictionary/english/playground).
+Will be using it to play with different AWS services supported by the [LocalStack](https://docs.localstack.cloud/overview/), to gain a better understanding.
 
 ## Prerequisites
 
@@ -32,7 +32,7 @@ new file `.env` to be used by Docker.
 
 > [!NOTE]
 >
-> If running any of the example code found in `/examples/` the ports will need to be available, if the code is not
-> being executed within a docker container within the same network.
+> If running any of the example code found in `/examples/` ports will need to be available on the host machine unless the code is
+> executed within a docker container within the same network.
 
 There is nothing else to it, fairly straight forward.
