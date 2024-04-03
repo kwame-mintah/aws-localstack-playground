@@ -3,7 +3,7 @@ import os
 import boto3
 
 BUCKET_NAME = os.environ.get('BUCKET_NAME', 'bucket-uno')
-aws_localstack = os.environ.get('LOCALSTACK_URL', 'http://eu-west-2.localhost.localstack.cloud:4566')
+LOCALSTACK_URL = os.environ.get('LOCALSTACK_URL', 'http://eu-west-2.localhost.localstack.cloud:4566')
 
 
 class AWSS3BucketManager:
@@ -22,7 +22,7 @@ class AWSS3BucketManager:
             # Set environment variable AWS_ENDPOINT_URL, if LOCALSTACK_OVERRIDE is set to true.
             # https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
             print('Localstack override enabled. \n Overriding AWS Endpoint URL for all services.')
-            os.environ['AWS_ENDPOINT_URL'] = aws_localstack
+            os.environ['AWS_ENDPOINT_URL'] = LOCALSTACK_URL
 
     def upload_to_bucket(
             self, filename: str, bucket: str, key: str,
@@ -56,8 +56,8 @@ def main():
     Upload file into s3 bucket then read contents of the file form the bucket.
     """
     s3 = AWSS3BucketManager()
-    s3.upload_to_bucket(filename='../python/example.json', key='/examples/example.json', bucket=BUCKET_NAME)
-    contents = s3.read_object_from_bucket(bucket=BUCKET_NAME, key='/examples/example.json')
+    s3.upload_to_bucket(filename='upload/example.json', key='/python/example.json', bucket=BUCKET_NAME)
+    contents = s3.read_object_from_bucket(bucket=BUCKET_NAME, key='/python/example.json')
     assert contents == b'{\n  "message" : "Hello World!"\n}\n'
 
 
