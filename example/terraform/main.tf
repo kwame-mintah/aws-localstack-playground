@@ -38,8 +38,8 @@ resource "aws_s3_object" "ls_bucket_object" {
   etag   = filemd5(("./upload/example.json"))
 }
 
-# List objects found within bucket
-data "aws_s3_object" "object_info" {
+# List objects found within bucket of the localstack.
+data "aws_s3_object" "localstack_object_info" {
   count  = length(data.aws_s3_objects.localstack_objects.keys)
   key    = element(data.aws_s3_objects.localstack_objects.keys, count.index)
   bucket = data.aws_s3_objects.localstack_objects.id
