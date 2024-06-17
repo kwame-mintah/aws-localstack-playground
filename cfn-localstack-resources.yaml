@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Deploys various resources to LocalStack.
+
+# https://docs.localstack.cloud/user-guide/aws/cloudformation/
+
+Resources:
+  LocalBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "bucket-uno"
+  LocalQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "queue-uno"
